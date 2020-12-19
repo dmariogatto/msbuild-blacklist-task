@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
+
+    <!-- Change the default location where NuGet will put the build output -->
+    <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- forces SDK to copy dependencies into build output to make packing easier -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <AssemblyName>Cats.Build.Blacklist</AssemblyName>
+    <RootNamespace>Cats.Build.Blacklist</RootNamespace>
+    <PackageId>Cats.Build.Blacklist</PackageId>
+    <Summary>Simple MSBuild task to scan package dependancies and fail if any have been blacklisted</Summary>
+    <PackageTags>msbuild nuget blacklist</PackageTags>
+    <Title>Cats.Build.Blacklist</Title>
+    <Description>Add a text file `package.blacklist` to your project, with the blacklisted package IDs on separate lines. A task will run `BeforeBuild` that will fail if any packages are found on the blacklist.</Description>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+    <Version>0.0.1-pre</Version>
+    <PackageVersion>0.0.1-pre</PackageVersion>
+    <Authors>dmariogatto</Authors>
+    <Owners>dmariogatto</Owners>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Copyright>© Daniel Gatto</Copyright>
+    <RepositoryUrl>https://github.com/dmariogatto/msbuild-blacklist-task</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/dmariogatto/msbuild-blacklist-task</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="build\*.targets" PackagePath="build\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Cats.Build.Blacklist.Core\Blacklist.cs" Link="Core\Blacklist.cs" />
+    <Compile Include="..\Cats.Build.Blacklist.Core\Models\BlacklistItem.cs" Link="Core\Models\BlacklistItem.cs" />
+    <Compile Include="..\Cats.Build.Blacklist.Core\Models\Dependency.cs" Link="Core\Models\Dependency.cs" />
+    <Compile Include="..\Cats.Build.Blacklist.Core\Models\Library.cs" Link="Core\Models\Library.cs" />
+    <Compile Include="..\Cats.Build.Blacklist.Core\Models\Target.cs" Link="Core\Models\Target.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" PrivateAssets="All" />
+    <PackageReference Include="NuGet.Versioning" Version="5.8.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+    <!--
+    The include needs to happen after output has been copied to build output folder
+    but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
+    -->
+    <ItemGroup>
+      <_PackageFiles Include="bin\$(Configuration)\*\Newtonsoft.Json.dll;bin\$(Configuration)\*\NuGet.Versioning.dll">
+        <PackagePath>build\%(RecursiveDir)</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
+
+</Project>

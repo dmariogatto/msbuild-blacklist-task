@@ -1,0 +1,6 @@
+# List of Blacklisted Packages
+# Version format https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges-and-wildcards
+Xamarin.Forms
+Newtonsoft.Json/[7.0.0,9.0.0]
+Google.Protobuf/[3.10.0]
+Portable.BouncyCastle/
