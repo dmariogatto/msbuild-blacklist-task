@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,46 +42,46 @@ namespace Cats.Build.Blacklist
                 jsonDocument = new JsonSerializer().Deserialize<JObject>(jReader);
 
             var version = jsonDocument.GetValue("version").ToObject<int>();
-            if (version == 3)
+            if (version != 3)
+                throw new NotImplementedException($"Expected \"project.assets.json\" version 3, got '{version}'");
+
+            var targets = jsonDocument.GetValue("targets").ToObject<JObject>();
+            foreach (var target in targets.Properties())
             {
-                var targets = jsonDocument.GetValue("targets").ToObject<JObject>();
-                foreach (var target in targets.Properties())
+                var targetObj = new Target()
                 {
-                    var targetObj = new Target()
-                    {
-                        Name = target.Name
-                    };
+                    Name = target.Name
+                };
 
-                    foreach (var lib in target.Value.ToObject<JObject>().Properties())
+                foreach (var lib in target.Value.ToObject<JObject>().Properties())
+                {
+                    var libComponents = lib.Name.Split('/');
+                    if (libComponents.Length == 2)
                     {
-                        var libComponents = lib.Name.Split('/');
-                        if (libComponents.Length == 2)
+                        var libObj = new Library()
                         {
-                            var libObj = new Library()
-                            {
-                                Name = libComponents[0],
-                                Version = libComponents[1],
-                                Type = lib.Value.Value<string>("type")
-                            };
+                            Name = libComponents[0],
+                            Version = libComponents[1],
+                            Type = lib.Value.Value<string>("type")
+                        };
 
-                            if (lib.Value.Value<JObject>("dependencies") is JObject deps)
+                        if (lib.Value.Value<JObject>("dependencies") is JObject deps)
+                        {
+                            foreach (var dep in deps.Properties())
                             {
-                                foreach (var dep in deps.Properties())
+                                libObj.Dependencies.Add(new Dependency()
                                 {
-                                    libObj.Dependencies.Add(new Dependency()
-                                    {
-                                        Name = dep.Name,
-                                        Version = dep.Value.ToObject<string>()
-                                    });
-                                }
+                                    Name = dep.Name,
+                                    Version = dep.Value.ToObject<string>()
+                                });
                             }
-
-                            targetObj.Libraries.Add(libObj);
                         }
-                    }
 
-                    result.Add(targetObj);
+                        targetObj.Libraries.Add(libObj);
+                    }
                 }
+
+                result.Add(targetObj);
             }
 
             return result;
