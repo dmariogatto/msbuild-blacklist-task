@@ -32,14 +32,14 @@ Add the package ID multiple times to perform a logical _OR_ between the rules.
 
 ```
 Newtonsoft.Json/[6.0.1] # Blacklist versions 6.0.1
-Newtonsoft.Json/[9.0.0] # Blacklist versions 9.0.0 (i.e. with above rule 6.0.1 or 9.0.0 will be blacklisted)
+Newtonsoft.Json/[9.0.0] # Blacklist versions 9.0.0 (i.e. with above rule, 6.0.1 or 9.0.0 will be blacklisted)
 ```
 
 Trying to build the project will result in an error if any of the blacklisted packages are found.
 
 ### Project References
 
-If you want to blacklist a project reference (e.g. to stop a business logic project referencing the UI), then create a text file in the project directory `project.blacklist`. It works the same as a above, with the project names on separate lines.
+If you want to blacklist a project reference (e.g. to stop a business logic project referencing the UI), then create a text file in the project directory `project.blacklist`. It works the same as above, with the project names on separate lines.
 
 ```
 MyAwesomeApp.UI # Blacklist UI reference from business logic project
