@@ -14,12 +14,23 @@ namespace Cats.Build.Blacklist
         {
             var foundItems = new Dictionary<string, IList<Library>>();
 
+            var packageDictionary = packageBlacklist
+                .GroupBy(i => i.Name)
+                .ToDictionary(g => g.Key, g => g.Select(i => i));
+            var projectDictionary = projectBlacklist
+                .GroupBy(i => i.Name)
+                .ToDictionary(g => g.Key, g => g.Select(i => i));
+
             foreach (var t in projectAssets)
             {
                 var packageMatches = t.Libraries
-                    .Where(l => l.Type == Library.PackageType && packageBlacklist.Any(p => p.Matches(l)));
+                    .Where(i => i.Type == Library.PackageType &&
+                                packageDictionary.ContainsKey(i.Name) &&
+                                packageDictionary[i.Name].Any(p => p.Matches(i)));
                 var projectMatches = t.Libraries
-                    .Where(l => l.Type == Library.ProjectType && projectBlacklist.Any(p => p.Matches(l)));
+                    .Where(i => i.Type == Library.ProjectType &&
+                                projectDictionary.ContainsKey(i.Name) &&
+                                projectDictionary[i.Name].Any(p => p.Matches(i)));
 
                 if (packageMatches.Any() || projectMatches.Any())
                 {
@@ -92,7 +103,9 @@ namespace Cats.Build.Blacklist
             var result = new List<BlacklistItem>();
 
             var lines = File.ReadAllLines(blacklistFilePath)
-                      .Select(l => l.Trim())
+                      .Select(l => l.IndexOf("#") is int idx && idx >= 0
+                                   ? l.Substring(0, idx).Trim()
+                                   : l.Trim())
                       .Where(l => !string.IsNullOrEmpty(l) && !l.StartsWith("#"));
 
             result.AddRange(lines.Select(l =>
