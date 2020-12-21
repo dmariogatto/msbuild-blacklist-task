@@ -103,10 +103,10 @@ namespace Cats.Build.Blacklist
             var result = new List<BlacklistItem>();
 
             var lines = File.ReadAllLines(blacklistFilePath)
-                      .Select(l => l.IndexOf("#") is int idx && idx >= 0
+                      .Select(l => l.IndexOf('#') is int idx && idx >= 0
                                    ? l.Substring(0, idx).Trim()
                                    : l.Trim())
-                      .Where(l => !string.IsNullOrEmpty(l) && !l.StartsWith("#"));
+                      .Where(l => !string.IsNullOrEmpty(l));
 
             result.AddRange(lines.Select(l =>
             {

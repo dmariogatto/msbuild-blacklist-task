@@ -20,8 +20,8 @@ namespace Cats.Build.Blacklist
 
             var projectAssets = Blacklist.GetProjectAssets(ProjectAssetsFilePath);
 
-            var packageBlacklist = File.Exists(ProjectAssetsFilePath)
-                ? Blacklist.GetBlacklistItems(ProjectAssetsFilePath)
+            var packageBlacklist = File.Exists(PackageBlacklistFilePath)
+                ? Blacklist.GetBlacklistItems(PackageBlacklistFilePath)
                 : Enumerable.Empty<BlacklistItem>();
             var projectBlacklist = File.Exists(ProjectBlacklistFilePath)
                 ? Blacklist.GetBlacklistItems(ProjectBlacklistFilePath)

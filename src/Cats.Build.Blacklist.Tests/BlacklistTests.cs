@@ -42,12 +42,13 @@ namespace Cats.Build.Blacklist.Tests
         public void CommentsBlackList()
         {
             var items = Blacklist.GetBlacklistItems(CommentsBlacklistFilePath);
-            Assert.IsTrue(items.Count == 1);
+            Assert.IsTrue(items.Count == 2);
 
-            var item = items.First();
+            var i1 = items.First(i => i.Name == "Xamarin.Forms");
+            var i2 = items.First(i => i.Name == "iTextSharp");
 
-            Assert.IsTrue(item.Name == "Xamarin.Forms");
-            Assert.IsTrue(item.Range == VersionRange.All);
+            Assert.IsTrue(i1.Range == VersionRange.All);
+            Assert.IsTrue(i2.Range == VersionRange.All);
         }
 
         [TestMethod]
