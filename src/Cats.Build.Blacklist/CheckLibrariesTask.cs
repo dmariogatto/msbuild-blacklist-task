@@ -18,7 +18,12 @@ namespace Cats.Build.Blacklist
                 return false;
             }
 
+            Log.LogMessage($"Project assets path: \"{ProjectAssetsFilePath}\"");
+
             var projectAssets = Blacklist.GetProjectAssets(ProjectAssetsFilePath);
+
+            Log.LogMessage($"Package blacklist path: \"{PackageBlacklistFilePath}\"");
+            Log.LogMessage($"Project blacklist path: \"{ProjectBlacklistFilePath}\"");
 
             var packageBlacklist = File.Exists(PackageBlacklistFilePath)
                 ? Blacklist.GetBlacklistItems(PackageBlacklistFilePath)
@@ -28,12 +33,10 @@ namespace Cats.Build.Blacklist
                 : Enumerable.Empty<BlacklistItem>();
 
             if (!packageBlacklist.Any())
-                Log.LogWarning($"No packages found on the blacklist \"{ProjectAssetsFilePath}\", assuming all are valid");
+                Log.LogWarning($"No packages found on the blacklist \"{PackageBlacklistFilePath}\", assuming all are valid");
             if (!projectBlacklist.Any())
                 Log.LogWarning($"No projects found on the blacklist \"{ProjectBlacklistFilePath}\", assuming all are valid");
-
-            Log.LogMessage($"Checking blacklisted libraries...");
-                        
+                                    
             var blacklistedItems = Blacklist.GetBlacklistedLibraries(projectAssets, packageBlacklist, projectBlacklist);
 
             foreach (var kv in blacklistedItems)

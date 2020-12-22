@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_TaskAssembly>$(MSBuildThisFileDirectory)..\build\netstandard2.0\Cats.Build.Blacklist.dll</_TaskAssembly>
+    <CatsProjectAssetsFilePath Condition="'$(CatsProjectAssetsFilePath)' == ''">$(MSBuildProjectDirectory)\obj\project.assets.json</CatsProjectAssetsFilePath>
+    <CatsPackageBlacklistFilePath Condition="'$(CatsPackageBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\package.blacklist</CatsPackageBlacklistFilePath>
+    <CatsProjectBlacklistFilePath Condition="'$(CatsProjectBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\project.blacklist</CatsProjectBlacklistFilePath>
+
+    <_CatsBlacklistTaskAssembly>$(MSBuildThisFileDirectory)..\build\netstandard2.0\Cats.Build.Blacklist.dll</_CatsBlacklistTaskAssembly>
   </PropertyGroup>
 
-  <UsingTask TaskName="Cats.Build.Blacklist.CheckLibrariesTask" AssemblyFile="$(_TaskAssembly)" />
+  <UsingTask TaskName="Cats.Build.Blacklist.CheckLibrariesTask" AssemblyFile="$(_CatsBlacklistTaskAssembly)" />
 
   <Target Name="CheckBlacklistedPackages" AfterTargets="BeforeBuild">
-    <Cats.Build.Blacklist.CheckLibrariesTask ProjectAssetsFilePath="$(MSBuildProjectDirectory)\obj\project.assets.json" PackageBlacklistFilePath="$(MSBuildProjectDirectory)\package.blacklist" ProjectBlacklistFilePath="$(MSBuildProjectDirectory)\project.blacklist" />
+    <Cats.Build.Blacklist.CheckLibrariesTask
+        ProjectAssetsFilePath="$(CatsProjectAssetsFilePath)"
+        PackageBlacklistFilePath="$(CatsPackageBlacklistFilePath)"
+        ProjectBlacklistFilePath="$(CatsProjectBlacklistFilePath)" />
   </Target>
 </Project>
