@@ -5,8 +5,8 @@ A simple MSBuild task to check your project's dependencies against a _blacklist_
 ## Why?
 
 1. Prevent packages with breaking features/bugs from being referenced in your project (includes transitive dependencies)
-2. Prevent the addition of UI frameworks into business logic projects (i.e. enforce separate of concerns)
-3. Prevent packages with strict usage licences from being installed (e.g. AGPL)
+2. Prevent packages with strict usage licences from being installed (e.g. AGPL)
+3. Prevent unwanted project references
 
 ## Installation
 
@@ -43,4 +43,18 @@ If you want to blacklist a project reference (e.g. to stop a business logic proj
 
 ```
 MyAwesomeApp.UI # Blacklist UI reference from business logic project
+```
+
+### How it works?
+
+The build task reads the generated `project.assets.json` file that is usually found in the `obj` folder. This is a map of all the project's dependencies, which is used to determine if there are any matches on the blacklist.
+
+You can override the any file paths used by the task by setting a property group in your `csproj`.
+
+```xml
+<PropertyGroup>
+  <CatsProjectAssetsFilePath>custom\path\file.json</CatsProjectAssetsFilePath>
+  <CatsPackageBlacklistFilePath>custom\path\file.blacklist</CatsPackageBlacklistFilePath>
+  <CatsProjectBlacklistFilePath>custom\path\file.blacklist</CatsProjectBlacklistFilePath>
+</PropertyGroup>
 ```
