@@ -33,10 +33,10 @@ namespace Cats.Build.Blacklist
                 : Enumerable.Empty<BlacklistItem>();
 
             if (!packageBlacklist.Any())
-                Log.LogWarning($"No packages found on the blacklist \"{PackageBlacklistFilePath}\", assuming all are valid");
+                Log.LogMessage($"No packages found on the blacklist \"{PackageBlacklistFilePath}\", assuming all are valid");
             if (!projectBlacklist.Any())
-                Log.LogWarning($"No projects found on the blacklist \"{ProjectBlacklistFilePath}\", assuming all are valid");
-                                    
+                Log.LogMessage($"No projects found on the blacklist \"{ProjectBlacklistFilePath}\", assuming all are valid");
+
             var blacklistedItems = Blacklist.GetBlacklistedLibraries(projectAssets, packageBlacklist, projectBlacklist);
 
             foreach (var kv in blacklistedItems)

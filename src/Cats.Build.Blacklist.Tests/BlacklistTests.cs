@@ -77,9 +77,9 @@ namespace Cats.Build.Blacklist.Tests
                 {
                     Name = "Portable.BouncyCastle",
                     Range = VersionRange.All
-                },                
+                },
             }.OrderBy(i => i.Name);
-            
+
             Assert.IsTrue(items.SequenceEqual(expected));
         }
     }
