@@ -102,25 +102,26 @@ namespace Cats.Build.Blacklist
         {
             var result = new List<BlacklistItem>();
 
-            var lines = File.ReadAllLines(blacklistFilePath)
-                      .Select(l => l.IndexOf('#') is int idx && idx >= 0
-                                   ? l.Substring(0, idx).Trim()
-                                   : l.Trim())
-                      .Where(l => !string.IsNullOrEmpty(l));
+            var lines = File.ReadAllLines(blacklistFilePath ?? string.Empty)
+                            .Select(l => l.IndexOf('#') is int idx && idx >= 0
+                                         ? l.Substring(0, idx).Trim()
+                                         : l.Trim())
+                            .Where(l => !string.IsNullOrEmpty(l));
 
             result.AddRange(lines.Select(l =>
             {
-                var components = l.Split('/');
-                return new BlacklistItem()
-                {
-                    Name = components[0],
-                    Range = components.Length == 2 &&
-                            !string.IsNullOrWhiteSpace(components[1]) &&
-                            VersionRange.TryParse(components[1], out var range)
-                            ? range
-                            : VersionRange.All
-                };
-            }).OrderBy(i => i.Name));
+                var components = l.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                return components.Length > 0
+                    ? new BlacklistItem()
+                    {
+                        Name = components[0],
+                        Range = components.Length == 2 &&
+                                VersionRange.TryParse(components[1], out var range)
+                                ? range
+                                : VersionRange.All
+                    }
+                    : null;
+            }).Where(i => i != null).OrderBy(i => i.Name));
 
             return result;
         }

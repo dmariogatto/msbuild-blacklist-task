@@ -6,7 +6,7 @@ namespace Cats.Build.Blacklist
     {
         public string Name { get; set; }
         public VersionRange Range { get; set; }
-        
+
         public bool Matches(Dependency dependency)
         {
             var depVersion = !string.IsNullOrWhiteSpace(dependency?.Version)
@@ -16,11 +16,11 @@ namespace Cats.Build.Blacklist
             return dependency?.Name == Name &&
                    (depVersion == null ||
                     Range == null ||
-                    Range == VersionRange.All ||                    
+                    Range == VersionRange.All ||
                     Range.Satisfies(depVersion));
         }
 
-        public override bool Equals(object obj) => 
+        public override bool Equals(object obj) =>
             obj is BlacklistItem item &&
             Name == item.Name &&
             Range?.Equals(item.Range) == true;
