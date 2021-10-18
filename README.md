@@ -10,7 +10,7 @@ A simple MSBuild task to check your project's dependencies against a _blacklist_
 
 ## Installation
 
-Install the [Nuget Package](https://www.nuget.org/packages/Cats.Build.Blacklist) into the project(s) that need a blacklist configured.
+Install the [![](https://img.shields.io/nuget/v/Cats.Build.Blacklist.svg)](https://nuget.org/packages/Cats.Build.Blacklist) into the project(s) that need a blacklist configured.
 
 ```
     Install-Package Cats.Build.Blacklist

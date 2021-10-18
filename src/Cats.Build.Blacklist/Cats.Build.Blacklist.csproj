@@ -20,8 +20,8 @@
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-    <Version>1.0.0</Version>
-    <PackageVersion>1.0.0</PackageVersion>
+    <Version>1.1.0</Version>
+    <PackageVersion>1.1.0</PackageVersion>
     <Authors>dmariogatto</Authors>
     <Owners>dmariogatto</Owners>
     <NeutralLanguage>en</NeutralLanguage>
@@ -32,6 +32,9 @@
     <PackageProjectUrl>https://github.com/dmariogatto/msbuild-blacklist-task</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
     <DevelopmentDependency>true</DevelopmentDependency>
+    <PackageReleaseNotes>
+- Updated dependencies
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,10 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" PrivateAssets="All" />
-    <PackageReference Include="NuGet.Versioning" Version="5.8.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.11.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.11.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" PrivateAssets="All" />
+    <PackageReference Include="NuGet.Versioning" Version="5.11.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
