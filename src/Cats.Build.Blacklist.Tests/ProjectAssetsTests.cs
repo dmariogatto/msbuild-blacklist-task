@@ -7,25 +7,25 @@ namespace Cats.Build.Blacklist.Tests
     [TestClass]
     public class ProjectAssetsTests
     {
-        public const string ProjectAssetsFilePath = @"Files\project.assets.json";
+        private static readonly string ProjectAssetsV3FilePath = $"Files{Path.DirectorySeparatorChar}projectV3.assets.json";
 
         [TestMethod]
-        public void FileDoesNotExist()
+        public void FileV3DoesNotExist()
         {
-            Assert.ThrowsException<FileNotFoundException>(() => Blacklist.GetProjectAssets("FAIL"));
+            Assert.Throws<FileNotFoundException>(() => Blacklist.GetProjectAssets("FAIL"));
         }
 
         [TestMethod]
-        public void ParsesNoError()
+        public void ParsesV3NoError()
         {
-            var projectAssests = Blacklist.GetProjectAssets(ProjectAssetsFilePath);
+            var projectAssests = Blacklist.GetProjectAssets(ProjectAssetsV3FilePath);
             Assert.IsTrue(projectAssests.Any());
         }
 
         [TestMethod]
-        public void ParsesLibraries()
+        public void ParsesV3Libraries()
         {
-            var projectAssests = Blacklist.GetProjectAssets(ProjectAssetsFilePath);
+            var projectAssets = Blacklist.GetProjectAssets(ProjectAssetsV3FilePath);
 
             var direct = new[]
             {
@@ -116,7 +116,7 @@ namespace Cats.Build.Blacklist.Tests
                 "Xamarin.Essentials",
             };
 
-            var target = projectAssests.First();
+            var target = projectAssets.First();
             var libNames = target.Libraries.Select(l => l.Name);
 
             Assert.IsTrue(libNames.Distinct().Count() == target.Libraries.Count, "Duplicate libraries");
