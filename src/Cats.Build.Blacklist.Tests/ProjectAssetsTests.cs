@@ -7,10 +7,11 @@ namespace Cats.Build.Blacklist.Tests
     [TestClass]
     public class ProjectAssetsTests
     {
-        private static readonly string ProjectAssetsV3FilePath = $"Files{Path.DirectorySeparatorChar}projectV3.assets.json";
+        internal static readonly string ProjectAssetsV3FilePath = $"Files{Path.DirectorySeparatorChar}projectV3.assets.json";
+        internal static readonly string ProjectAssetsV4FilePath = $"Files{Path.DirectorySeparatorChar}projectV4.assets.json";
 
         [TestMethod]
-        public void FileV3DoesNotExist()
+        public void FileDoesNotExist()
         {
             Assert.Throws<FileNotFoundException>(() => Blacklist.GetProjectAssets("FAIL"));
         }
@@ -114,6 +115,41 @@ namespace Cats.Build.Blacklist.Tests
                 "System.Threading.Tasks.Extensions",
                 "System.ValueTuple",
                 "Xamarin.Essentials",
+            };
+
+            var target = projectAssets.First();
+            var libNames = target.Libraries.Select(l => l.Name);
+
+            Assert.IsTrue(libNames.Distinct().Count() == target.Libraries.Count, "Duplicate libraries");
+            Assert.IsTrue(libNames.Except(direct.Concat(transitive)).Count() == 0);
+        }
+
+        [TestMethod]
+        public void ParsesV4NoError()
+        {
+            var projectAssests = Blacklist.GetProjectAssets(ProjectAssetsV4FilePath);
+            Assert.IsTrue(projectAssests.Any());
+        }
+
+        [TestMethod]
+        public void ParsesV4Libraries()
+        {
+            var projectAssets = Blacklist.GetProjectAssets(ProjectAssetsV4FilePath);
+
+            var direct = new[]
+            {
+                "Newtonsoft.Json",
+                "NuGet.Versioning",
+            };
+
+            var transitive = new[]
+            {
+                "Microsoft.Build.Framework",
+                "Microsoft.Build.Utilities.Core",
+                "Microsoft.NET.StringTools",
+                "System.Configuration.ConfigurationManager",
+                "System.Diagnostics.EventLog",
+                "System.Security.Cryptography.ProtectedData",
             };
 
             var target = projectAssets.First();

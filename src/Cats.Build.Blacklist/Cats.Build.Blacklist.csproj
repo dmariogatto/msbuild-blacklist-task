@@ -20,8 +20,8 @@
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-    <Version>1.1.0</Version>
-    <PackageVersion>1.1.0</PackageVersion>
+    <Version>2.0.0</Version>
+    <PackageVersion>2.0.0</PackageVersion>
     <Authors>dmariogatto</Authors>
     <Owners>dmariogatto</Owners>
     <NeutralLanguage>en</NeutralLanguage>
@@ -33,7 +33,8 @@
     <PackageIcon>logo.png</PackageIcon>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackageReleaseNotes>
-- Updated dependencies
+- Target net10
+- Support for "project.assets.json" version 4
     </PackageReleaseNotes>
   </PropertyGroup>
 
@@ -52,7 +53,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="18.6.3" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.6.3" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" PrivateAssets="All" />
     <PackageReference Include="NuGet.Versioning" Version="7.6.0" PrivateAssets="All" />
   </ItemGroup>
 

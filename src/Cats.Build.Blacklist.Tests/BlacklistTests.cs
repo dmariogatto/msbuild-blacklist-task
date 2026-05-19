@@ -8,10 +8,11 @@ namespace Cats.Build.Blacklist.Tests
     [TestClass]
     public class BlacklistTests
     {
-        private static readonly string EmptyBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}empty.blacklist";
-        private static readonly string SimpleBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}simple.blacklist";
-        private static readonly string CommentsBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}comments.blacklist";
-        private static readonly string PackageBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}package.blacklist";
+        internal static readonly string EmptyBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}empty.blacklist";
+        internal static readonly string SimpleBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}simple.blacklist";
+        internal static readonly string SimpleMixedCaseBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}simple.mixedcase.blacklist";
+        internal static readonly string CommentsBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}comments.blacklist";
+        internal static readonly string PackageBlacklistFilePath = $"Files{Path.DirectorySeparatorChar}package.blacklist";
 
         [TestMethod]
         public void FileDoesNotExist()
@@ -35,6 +36,18 @@ namespace Cats.Build.Blacklist.Tests
             var item = items.First();
 
             Assert.IsTrue(item.Name == "Xamarin.Forms");
+            Assert.IsTrue(item.Range == VersionRange.All);
+        }
+
+        [TestMethod]
+        public void SimpleBlackListMixedCase()
+        {
+            var items = Blacklist.GetBlacklistItems(SimpleMixedCaseBlacklistFilePath);
+            Assert.IsTrue(items.Count == 1);
+
+            var item = items.First();
+
+            Assert.IsTrue(item.Name == "xamArin.forMS");
             Assert.IsTrue(item.Range == VersionRange.All);
         }
 

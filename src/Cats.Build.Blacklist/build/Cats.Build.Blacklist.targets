@@ -5,10 +5,14 @@
     <CatsPackageBlacklistFilePath Condition="'$(CatsPackageBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\package.blacklist</CatsPackageBlacklistFilePath>
     <CatsProjectBlacklistFilePath Condition="'$(CatsProjectBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\project.blacklist</CatsProjectBlacklistFilePath>
 
-    <_CatsBlacklistTaskAssembly>$(MSBuildThisFileDirectory)..\build\netstandard2.0\Cats.Build.Blacklist.dll</_CatsBlacklistTaskAssembly>
+    <_CatsBlacklistTaskAssembly>$(MSBuildThisFileDirectory)\$(TargetFramework)\Cats.Build.Blacklist.dll</_CatsBlacklistTaskAssembly>
   </PropertyGroup>
 
-  <UsingTask TaskName="Cats.Build.Blacklist.CheckLibrariesTask" AssemblyFile="$(_CatsBlacklistTaskAssembly)" />
+  <UsingTask
+    TaskName="Cats.Build.Blacklist.CheckLibrariesTask"
+    AssemblyFile="$(_CatsBlacklistTaskAssembly)"
+    Runtime="NET"
+    Architecture="CurrentArchitecture" />
 
   <Target Name="CheckBlacklistedPackages" AfterTargets="BeforeBuild">
     <Cats.Build.Blacklist.CheckLibrariesTask
