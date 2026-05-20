@@ -1,4 +1,5 @@
 ﻿using NuGet.Versioning;
+using System;
 
 namespace Cats.Build.Blacklist
 {
@@ -13,21 +14,26 @@ namespace Cats.Build.Blacklist
                 ? NuGetVersion.Parse(dependency.Version)
                 : null;
 
-            return dependency?.Name == Name &&
-                   (depVersion == null ||
-                    Range == null ||
+            return string.Equals(dependency?.Name, Name, StringComparison.OrdinalIgnoreCase) &&
+                   (depVersion is null ||
+                    Range is null ||
                     Range == VersionRange.All ||
                     Range.Satisfies(depVersion));
         }
 
-        public override bool Equals(object obj) =>
-            obj is BlacklistItem item &&
-            Name == item.Name &&
-            Range?.Equals(item.Range) == true;
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+                return true;
 
-        public override int GetHashCode() => (Name, Range).GetHashCode();
+            return obj is BlacklistItem item &&
+                Name == item.Name &&
+                Range?.Equals(item.Range) == true;
+        }
 
-        public override string ToString() => !string.IsNullOrEmpty(Name) && Range != null
+        public override int GetHashCode() => HashCode.Combine(Name, Range);
+
+        public override string ToString() => !string.IsNullOrEmpty(Name) && Range is not null
             ? $"{Name}/{Range.PrettyPrint()}"
             : base.ToString();
     }

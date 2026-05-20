@@ -43,7 +43,7 @@ namespace Cats.Build.Blacklist
             {
                 foreach (var p in kv.Value)
                 {
-                    Log.LogError($"'{p}; {kv.Key}' has been blacklisted! Please remove reference to continue 🔥");
+                    Log.LogError($"'{p}; {kv.Key}' has been blacklisted! Please remove {p.ReferenceType} reference to continue 🔥");
                 }
             }
 
