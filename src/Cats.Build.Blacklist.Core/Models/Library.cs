@@ -9,12 +9,12 @@ namespace Cats.Build.Blacklist
         public const string PackageType = "package";
         public const string ProjectType = "project";
 
-        public const string TopLevelReference = "top-level";
-        public const string TransitiveReference = "transitive";
+        public const string TopLevelReferenceType = "top-level";
+        public const string TransitiveReferenceType = "transitive";
 
-        public string Type { get; set; }
-        public string ReferenceType { get; set; }
-        public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
+        public string Type { get; init; } = string.Empty;
+        public string ReferenceType { get; init; } = string.Empty;
+        public IList<Dependency> Dependencies { get; init; } = new List<Dependency>();
 
         public override bool Equals(object obj)
             => Equals(obj as Library);

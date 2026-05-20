@@ -5,7 +5,7 @@
     <CatsPackageBlacklistFilePath Condition="'$(CatsPackageBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\package.blacklist</CatsPackageBlacklistFilePath>
     <CatsProjectBlacklistFilePath Condition="'$(CatsProjectBlacklistFilePath)' == ''">$(MSBuildProjectDirectory)\project.blacklist</CatsProjectBlacklistFilePath>
 
-    <_CatsBlacklistTaskAssembly>$(MSBuildThisFileDirectory)\$(TargetFramework)\Cats.Build.Blacklist.dll</_CatsBlacklistTaskAssembly>
+    <_CatsBlacklistTaskAssembly>$(MSBuildThisFileDirectory)\net10.0\Cats.Build.Blacklist.dll</_CatsBlacklistTaskAssembly>
   </PropertyGroup>
 
   <UsingTask

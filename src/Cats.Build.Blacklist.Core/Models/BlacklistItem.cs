@@ -5,8 +5,8 @@ namespace Cats.Build.Blacklist
 {
     public class BlacklistItem
     {
-        public string Name { get; set; }
-        public VersionRange Range { get; set; }
+        public string Name { get; init; }
+        public VersionRange Range { get; init; }
 
         public bool Matches(Dependency dependency)
         {

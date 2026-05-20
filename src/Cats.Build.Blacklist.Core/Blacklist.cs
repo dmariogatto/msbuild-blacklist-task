@@ -55,22 +55,28 @@ namespace Cats.Build.Blacklist
                     throw new NotImplementedException($"Expected \"project.assets.json\" version 3 or 4, got '{versionElement}'");
                 }
 
-                if (root.TryGetProperty("targets", out var targets) && root.TryGetProperty("projectFileDependencyGroups", out var projDepGroups))
+                if (root.TryGetProperty("targets", out var targets))
                 {
                     foreach (var target in targets.EnumerateObject())
                     {
                         var targetObj = new Target { Name = target.Name };
 
-                        var projDepGroup = projDepGroups
-                            .EnumerateObject()
-                            .FirstOrDefault(g => g.Name.Equals(target.Name, StringComparison.OrdinalIgnoreCase));
-                        var directDeps = projDepGroup.Value.ValueKind != JsonValueKind.Undefined
-                            ? projDepGroup.Value.EnumerateArray()
-                                .Select(i => i.GetString())
-                                .Where(i => !string.IsNullOrWhiteSpace(i) && i.IndexOf(' ') > 0)
-                                .Select(i => i.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0] ?? string.Empty)
-                                .ToHashSet(StringComparer.OrdinalIgnoreCase)
-                            : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        var directDeps = new HashSet<string>();
+
+                        if (root.TryGetProperty("projectFileDependencyGroups", out var projDepGroups))
+                        {
+                            var projDepGroup = projDepGroups
+                                .EnumerateObject()
+                                .FirstOrDefault(g => g.Name.Equals(target.Name, StringComparison.OrdinalIgnoreCase));
+                            if (projDepGroup.Value.ValueKind != JsonValueKind.Undefined)
+                            {
+                                directDeps = projDepGroup.Value.EnumerateArray()
+                                    .Select(i => i.GetString())
+                                    .Where(i => !string.IsNullOrWhiteSpace(i) && i.IndexOf(' ') > 0)
+                                    .Select(i => i.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0] ?? string.Empty)
+                                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                            }
+                        }
 
                         foreach (var lib in target.Value.EnumerateObject())
                         {
@@ -82,7 +88,7 @@ namespace Cats.Build.Blacklist
                                     Name = libComponents[0],
                                     Version = libComponents[1],
                                     Type = lib.Value.TryGetProperty("type", out var type) ? type.GetString() : null,
-                                    ReferenceType = directDeps.Contains(libComponents[0]) ? Library.TopLevelReference : Library.TransitiveReference
+                                    ReferenceType = directDeps.Contains(libComponents[0]) ? Library.TopLevelReferenceType : Library.TransitiveReferenceType
                                 };
 
                                 if (lib.Value.TryGetProperty("dependencies", out var deps))

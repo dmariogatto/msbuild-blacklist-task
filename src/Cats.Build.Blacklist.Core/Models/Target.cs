@@ -6,8 +6,8 @@ namespace Cats.Build.Blacklist
 {
     public class Target
     {
-        public string Name { get; set; }
-        public List<Library> Libraries { get; set; } = new List<Library>();
+        public string Name { get; init; }
+        public IList<Library> Libraries { get; init; } = new List<Library>();
 
         public override bool Equals(object obj)
             => Equals(obj as Target);

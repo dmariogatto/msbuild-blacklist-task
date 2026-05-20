@@ -4,8 +4,8 @@ namespace Cats.Build.Blacklist
 {
     public class Dependency
     {
-        public string Name { get; set; }
-        public string Version { get; set; }
+        public string Name { get; init; }
+        public string Version { get; init; }
 
         public override bool Equals(object obj)
         {
